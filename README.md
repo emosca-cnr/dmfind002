@@ -1,6 +1,4 @@
-![](vignettes/images/dmfindLogo.jpg){width=50%}
-
-<img src="vignettes/images/dmfindLogo.jpg" width="100">
+<img src="vignettes/images/dmfindLogo.jpg" width="200">
 
 # dmfind version 0.0.2
 
