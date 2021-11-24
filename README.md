@@ -1,3 +1,4 @@
+![](vignettes/images/dmfindLogo.png)
 # dmfind version 0.0.2
 
 Network diffusion-based analysis of omics for the identifcation of differentially enriched modules.
