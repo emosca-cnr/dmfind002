@@ -1,0 +1,24 @@
+Copyright (c) 2016, Ettore Mosca, Luciano Milanesi, Matteo Bersanelli
+
+In the following, we define as "software" the dmfind R package and
+its documentation, including the tutorial.
+
+You may not use the software for commercial purposes. Unauthorized
+copying and distribution of this software, via any medium, is strictly
+prohibited. If you use this software, please cite the following
+publication:
+
+Network diffusion-based analysis of high-throughput data for the
+detection of differentially enriched modules.
+Bersanelli M, Mosca E, Remondini D, Castellani G, Milanesi L.
+Sci Rep. 2016 Oct 12;6:34841. doi: 10.1038/srep34841.
+
+Contacts: {ettore.mosca, luciano.milanesi}@itb.cnr.it
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

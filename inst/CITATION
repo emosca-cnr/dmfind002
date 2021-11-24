@@ -1,0 +1,10 @@
+bibentry(
+  bibtype = "Article",
+  title = "Network diffusion-based analysis of high-throughput data for the detection of differentially enriched modules",
+  author = c(person("Matteo", "Bersanelli"), person("Ettore", "Mosca"), person("Daniel", "Remondini"), person("Gastone", "Castellani"), person("Luciano", "Milanesi")),
+  journal = "Scientific Reports",
+  year = "2016",
+  volume = 6,
+  pages = 34841,
+  doi = "10.1038/srep34841"
+)

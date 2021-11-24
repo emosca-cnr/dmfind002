@@ -1,0 +1,108 @@
+---
+title: "dmfind tutorial"
+author: "Ettore Mosca"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Network diffusion-based analysis of omics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+devtools::load_all(".")
+```
+
+##Introduction
+The R package dmfind implements the algorithms described in @Bersanelli2016. In this tutorial we will use igraph package for preparing the input data and plotting the results.
+
+##Installation
+The package can be installed from within R:
+```{r, eval=FALSE}
+library(devtools)
+install_github("emosca-cnr/dmfind002", build_vignettes = TRUE)
+library(dmfind)
+```
+
+##Input data
+The package requires an adjacency matrix and one or more input vectors. Let's create a simulated input dataset, including: a normalized adjacency matrix (A), a two-columns matrix (D) with two vectors representing descriptive statistics of two sample groups, and a binary vector where positive elements indicates the significant elements of an inferential statistics (u):
+
+```{r, eval=TRUE, message=FALSE}
+library(igraph)
+
+edge_list_ig <- list(c(2, 3, 4, 12), c(1,3,4,5, 13), c(1, 2, 3), c(1,2,5), c(2,4, 7, 9), 7,
+                              c(5,6,8), c(7,10), c(5,10), c(8,9,11), 10, 1, 2)
+edge_list <- do.call(rbind, lapply(1:length(edge_list_ig),
+                                   function(i) cbind(i, edge_list_ig[[i]])))
+G <- graph_from_adj_list(edge_list_ig, 'all')
+N <- length(V(G))
+V(G)$name <- 1:N
+A <- dmfind::normalize_adj_mat(as.matrix(as_adjacency_matrix(G)))
+D <- matrix(abs(c(rnorm(N, 0, 0.2), rnorm(4, 2), rnorm(N-4, 0, 0.2))), ncol = 2,
+            dimnames = list(1:N, 1:2))
+temp_tgt <- D[1:4, 2]
+temp_src_idx <- order(-D[, 2])[1:4]
+temp_src <- D[temp_src_idx, 2]
+D[1:4, 2] <- temp_src
+D[temp_src_idx, 2] <- temp_tgt
+u <- matrix(c(rep(1, 4), rep(0, N-4)), ncol=1, dimnames = list(1:N))
+print(D)
+print(u)
+```
+Note that elements ${1, 2, 3, 4}$ are enriched in information in `D[, 2]` in comparison to `D[, 1]`, and are positive in $u$. At this point we can calculate the network smoothing index $(S)$ of each sample group and its variation $\Delta S$:
+```{r, eval=TRUE, message=FALSE, eval=T}
+dS_Ds <- dmfind::calc_dS(D, A, classes = c(1, 2), eps = 4)
+print(dS_Ds)
+plot(dS_Ds$dX0, dS_Ds$dS, xlab='dX0', ylab='dS', pch='')
+text(dS_Ds$dX0, dS_Ds$dS, rownames(dS_Ds), cex=0.7)
+```
+
+In case of the vector $u$ we calculate the permutation-adjusted network smoothing index $(Sp)$:
+
+```{r, eval=TRUE, message=FALSE}
+Sp_u <- dmfind::calc_Sp(u, A, k=9, eps = 4)
+print(Sp_u)
+```
+
+Network resampling allows to assess the list ranked by $\Delta S$ (or $Sp$) for the presence of significantly connected components:
+```{r, eval=TRUE, message=FALSE}
+res <- dmfind::NR(edge_list, sort(array(dS_Ds$dS, dimnames = list(rownames(dS_Ds))), decreasing = TRUE), k=99)
+print(res$NR_summary)
+plot(log10(res$NR_summary$p), xlab='rank', type='l', ylab="log10(p)", ylim=c(-2,0))
+```
+
+Let's plot the network underlying the region with the highest $\Delta S$:
+```{r, eval=TRUE, message=FALSE}
+V(G)$color <- heat.colors(16)[
+  dmfind::round(
+    linear_map(
+      res$NR_summary$ranking_score[match(V(G)$name, names(res$NR_summary$ranking_score))], 1, 16))]
+par(mar=c(0, 0, 0, 0))
+plot.igraph(G, vertex.size=10, vertex.label.cex=1)
+```
+
+##Reference
+
+---
+references:
+- id: Bersanelli2016
+  title: Network diffusion-based analysis of high-throughput data for the detection of differentially enriched modules
+  author:
+  - family: Bersanelli
+    given: Matteo
+  - family: Mosca
+    given: Ettore
+  - family: Remondini
+    given: Daniel
+  - family: Castellani
+    given: Gastone
+  - family: Milanesi
+    given: Luciano
+  container-title: Scientific Reports
+  volume: 6
+  DOI: 10.1038/srep34841
+  page: 34841
+  type: article-journal
+  issued:
+    year: 2016
+---
