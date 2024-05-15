@@ -23,5 +23,4 @@ vignette("dmfind")
 ```
 
 # IMPORTANT NOTE
-*A new version of dmfind is available here: https://github.com/emosca-cnr/dmfind*
-*The code in this repository will not be updated anymore.*
+*A new version of dmfind is available here: https://github.com/emosca-cnr/dmfind. The code in this repository will not be updated anymore.*
